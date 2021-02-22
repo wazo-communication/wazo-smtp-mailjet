@@ -1,4 +1,4 @@
-# Wazo modify Mail configuration 
+# Wazo Mailjet configuration 
 
 If you want modify the SMTP parameters to your personal parameters with Mailjet.
 
