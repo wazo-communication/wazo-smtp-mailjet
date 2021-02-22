@@ -1,0 +1,10 @@
+name: wazo-smtp-mailjet
+namespace: official
+version: 1.0.0
+author: Wazo Support
+display_name: SMTP Mailjet configuration
+min_wazo_version: 20.01
+tags:
+  - support
+  - mail
+homepage: http://support.wazo.io
