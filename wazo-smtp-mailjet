@@ -85,14 +85,22 @@ config_mailjet_login() {
 
 configure_main_cf_template() {
     echo "
-# Add by wazo-update-smtp-origin
+# Add by wazo-smtp-mailjet
 smtp_sender_dependent_authentication = yes
 sender_dependent_relayhost_maps = hash:/etc/postfix/sender_relay
 smtp_sasl_auth_enable = yes
 smtp_sasl_security_options = noanonymous
 smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd" >> /etc/xivo/custom-templates/postfix/etc/postfix/main.cf
 
-final_step
+}
+
+check_if_main_cf_template_already_exist() {
+    if grep wazo-smtp-mailjet /etc/xivo/custom-templates/postfix/etc/postfix/main.cf 2>&1 > /dev/null
+    then
+        return 1
+    fi
+
+    return 0
 }
 
 create_wazo_template() {
@@ -102,8 +110,16 @@ create_wazo_template() {
     echo $3 $1:$2 > /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
     chmod 600 /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
     chown root:root /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
+    postmap /etc/xivo/custom-templates/postfix/etc/postfix/sender_relay
+    postmap /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
 
-    configure_main_cf_template
+    check_if_main_cf_template_already_exist
+    if [ $? > 0 ]
+    then
+        configure_main_cf_template
+    fi
+
+    final_step
 }
 
 final_step() {
