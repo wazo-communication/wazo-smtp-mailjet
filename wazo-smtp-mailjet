@@ -49,7 +49,7 @@ update_canonical() {
 
 update_relayhost() {
     Relayhost=$(whiptail --title "Hello Wazo HELP / Modify relayhost" \
-      --inputbox "Please write Mailjet relay host with port (ex.: in-v3.mailjet.com:587):" 13 60 3>&1 1>&2 2>&3)
+      --inputbox "Please write Mailjet relay host with port (ex.: in-v3.mailjet.com:587):" 13 60 in-v3.mailjet.com:587 3>&1 1>&2 2>&3)
 
     exitstatus=$?
     if [ $exitstatus = 0 ]; then
@@ -94,15 +94,6 @@ smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd" >> /etc/xivo/custom-tem
 
 }
 
-check_if_main_cf_template_already_exist() {
-    if grep wazo-smtp-mailjet /etc/xivo/custom-templates/postfix/etc/postfix/main.cf 2>&1 > /dev/null
-    then
-        return 1
-    fi
-
-    return 0
-}
-
 create_wazo_template() {
     mkdir -p /etc/xivo/custom-templates/postfix/etc/postfix/
     cp /etc/postfix/main.cf /etc/xivo/custom-templates/postfix/etc/postfix/
@@ -113,13 +104,13 @@ create_wazo_template() {
     postmap /etc/xivo/custom-templates/postfix/etc/postfix/sender_relay
     postmap /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
 
-    check_if_main_cf_template_already_exist
-    if [ $? > 0 ]
+    if grep -F "wazo-smtp-mailjet" /etc/xivo/custom-templates/postfix/etc/postfix/main.cf > /dev/null
     then
+        final_step
+    else
         configure_main_cf_template
+        final_step
     fi
-
-    final_step
 }
 
 final_step() {
