@@ -90,21 +90,21 @@ smtp_sender_dependent_authentication = yes
 sender_dependent_relayhost_maps = hash:/etc/postfix/sender_relay
 smtp_sasl_auth_enable = yes
 smtp_sasl_security_options = noanonymous
-smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd" >> /etc/xivo/custom-templates/postfix/etc/postfix/main.cf
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd" >> /etc/xivo/custom-templates/mail/etc/postfix/main.cf
 
 }
 
 create_wazo_template() {
-    mkdir -p /etc/xivo/custom-templates/postfix/etc/postfix/
-    cp /etc/postfix/main.cf /etc/xivo/custom-templates/postfix/etc/postfix/
-    echo $4 $3 > /etc/xivo/custom-templates/postfix/etc/postfix/sender_relay
-    echo $3 $1:$2 > /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
-    chmod 600 /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
-    chown root:root /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
-    postmap /etc/xivo/custom-templates/postfix/etc/postfix/sender_relay
-    postmap /etc/xivo/custom-templates/postfix/etc/postfix/sasl_passwd
+    mkdir -p /etc/xivo/custom-templates/mail/etc/postfix/
+    cp /etc/postfix/main.cf /etc/xivo/custom-templates/mail/etc/postfix/
+    echo $4 $3 > /etc/xivo/custom-templates/mail/etc/postfix/sender_relay
+    echo $3 $1:$2 > /etc/xivo/custom-templates/mail/etc/postfix/sasl_passwd
+    chmod 600 /etc/xivo/custom-templates/mail/etc/postfix/sasl_passwd
+    chown root:root /etc/xivo/custom-templates/mail/etc/postfix/sasl_passwd
+    postmap /etc/xivo/custom-templates/mail/etc/postfix/sender_relay
+    postmap /etc/xivo/custom-templates/mail/etc/postfix/sasl_passwd
 
-    if grep -F "wazo-smtp-mailjet" /etc/xivo/custom-templates/postfix/etc/postfix/main.cf > /dev/null
+    if grep -F "wazo-smtp-mailjet" /etc/xivo/custom-templates/mail/etc/postfix/main.cf > /dev/null
     then
         final_step
     else
